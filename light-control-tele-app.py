@@ -1,4 +1,3 @@
-
 from telegram.ext import Updater,CommandHandler,MessageHandler,Filters
 from Adafruit_IO import Client,Data
 import os
@@ -12,9 +11,8 @@ def turnonthelight(update, context):
   context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://img.icons8.com/plasticine/2x/light-on.png')
   send_value(1)
 
-  
 def send_value(value):
-  feed = aio.feeds('telegram_app_bot1')
+  feed = aio.feeds('telegram_eniya_bot')
   aio.send_data(feed.key,value)
 
 def input_message(update, context):
@@ -35,7 +33,7 @@ def start(update,context):
 '''
   context.bot.send_message(chat_id=update.effective_chat.id, text=start_message)
 
-ADAFRUIT_IO_USERNAME =  os.getenv('ADAFRUIT_IO_USERNAME')
+ADAFRUIT_IO_USERNAME = os.getenv('ADAFRUIT_IO_USERNAME')
 ADAFRUIT_IO_KEY = os.getenv('ADAFRUIT_IO_KEY')
 TOKEN = os.getenv('TOKEN')
 
