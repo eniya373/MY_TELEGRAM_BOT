@@ -29,7 +29,7 @@ def turnoffthelight(update, context):
 def message_given(update, context):
   text=update.message.text
   if text == 'Start':
-    start(update,context):
+    start(update,context)
   if text == 'Turn on the light':
     turnonthelight(update, context)
     send_value(1)
