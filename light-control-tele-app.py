@@ -1,44 +1,45 @@
+
 from telegram.ext import Updater,CommandHandler,MessageHandler,Filters
 from Adafruit_IO import Client,Data
 import os
 
-ADAFRUIT_IO_USERNAME =  os.getenv('ADAFRUIT_IO_USERNAME')
-ADAFRUIT_IO_KEY = os.getenv('ADAFRUIT_IO_KEY')
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+def turnoffthelight(update, context):
+  context.bot.send_message(chat_id=update.effective_chat.id, text="Bulb turned off")
+  context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://pngimg.com/uploads/bulb/bulb_PNG1241.png')
+  send_value(0)
+def turnonthelight(update, context):
+  context.bot.send_message(chat_id=update.effective_chat.id, text="Bulb turned on")
+  context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://img.icons8.com/plasticine/2x/light-on.png')
+  send_value(1)
 
 def send_value(value):
-  feed = aio.feeds('telegram_app_bot')
+  feed = aio.feeds('telegram_app_bot1')
   aio.send_data(feed.key,value)
-    
+
+def input_message(update, context):
+  text=update.message.text
+  if text == 'turnonthelight':
+    send_value(1)
+    context.bot.send_message(chat_id=update.effective_chat.id,text="Bulb turned on")
+    context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://img.icons8.com/plasticine/2x/light-on.png')
+  elif text == 'turnoffthelight':
+    send_value(0)
+    context.bot.send_message(chat_id=update.effective_chat.id,text="Bulb turned off")
+    context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://pngimg.com/uploads/bulb/bulb_PNG1241.png')
+
 def start(update,context):
   start_message='''
 /turnoff the light or 'turn off':To turn off the bulb ,sends value=0 in feed
 /turnon the light or 'turn on'  :To turn on the bulb ,sends value=1 in feed
 '''
   context.bot.send_message(chat_id=update.effective_chat.id, text=start_message)
-    
-def turnonthelight(update, context):
-  context.bot.send_message(chat_id=update.effective_chat.id, text="Turning on the bulb")
-  context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://cdn4.vectorstock.com/i/1000x1000/48/08/realistic-glowing-light-bulb-on-dark-background-vector-3374808.jpg')
-  send_value(1)
-def turnoffthelight(update, context):
-  context.bot.send_message(chat_id=update.effective_chat.id, text="Turning off the bulb")
-  context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://ak.picdn.net/shutterstock/videos/1027638404/thumb/1.jpg?ip=x480')
-  send_value(0)
 
-def message_given(update, context):
-  text=update.message.text
-  if text == 'Start':
-    start(update,context)
-  if text == 'Turn on the light':
-    turnonthelight(update, context)
-    send_value(1)
-  elif text == 'Turn off the light':
-    turnoffthelight(update, context)
-    send_value(0)
-    
+ADAFRUIT_IO_USERNAME =  os.getenv('ADAFRUIT_IO_USERNAME')
+ADAFRUIT_IO_KEY = os.getenv('ADAFRUIT_IO_KEY')
+TOKEN = os.getenv('TOKEN')
+
 aio = Client(ADAFRUIT_IO_USERNAME,ADAFRUIT_IO_KEY)
-updater=Updater(TELEGRAM_TOKEN,use_context=True)
+updater=Updater(TOKEN,use_context=True)
 dispatcher = updater.dispatcher
 dispatcher.add_handler(CommandHandler('turnoffthelight',turnoffthelight))
 dispatcher.add_handler(CommandHandler('turnonthelight',turnonthelight))
