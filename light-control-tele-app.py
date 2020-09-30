@@ -12,19 +12,16 @@ y = os.getenv('y')
 Telegram_token = os.getenv('Telegram_token')
 aio = Client(x,y)
 
-feed_value=Feed(name='telegrambot')
-result=aio.create_feed(feed_value)
-
 def start(bot, update):
-    bot.send_message(chat_id = update.effective_chat.id, text="WELCOME!")
-    bot.send_message(chat_id = update.effective_chat.id, text="If you want to turn on the light then type in 'Turn on the light' or if you want to turn off the light then type in 'Turn off the light'")
+    print(str( update.effective_chat.id ))
+    bot.send_message(chat_id = update.effective_chat.id, text="Welcome! If you want to turn on the light then type in 'Turn on the light' or if you want to turn off the light then type in 'Turn off the light'")
 
 def wrong_message(bot, update):
     bot.send_message(chat_id=update.effective_chat.id, text="Oops!,I Couldn't recognize.Please try again!!")
     
 def send_data_to_adafruit(value1):
-  value = Data(value=value1)
-  value_send = aio.create_data('telegrambot',value)
+   to_feed = aio.feeds('telegram_app_bot')
+   aio.send_data(to_feed.key,value1)
     
 def turn_on_light(bot, update):
   chat_id = update.message.chat_id
@@ -39,6 +36,7 @@ def turn_off_light(bot, update):
   send_data_adafruit(0)
   
 def text_given_in_tele(bot, update):
+  text = update.message.text.upper()
   text = update.message.text
   if text == 'Start':
     start(bot,update)
@@ -49,9 +47,13 @@ def text_given_in_tele(bot, update):
   else:
     wrong_message(bot,update)
     
-ud = Updater('Telegram_token')
-dip = ud.dispatcher
-dip.add_handler(MessageHandler(Filters.text, text_given_in_tele))
+ud = Updater('Telegram_token',use_context = True)
+dp = ud.dispatcher
+dp.add_handler(CommandHandler('lighton',lighton))  # register a handler
+dp.add_handler(CommandHandler('lightoff',lightoff))
+dp.add_handler(CommandHandler('start', start))
+dp.add_handler(MessageHandler(Filters.command, unknown))
+dp.add_handler(MessageHandler(Filters.text, text_given_in_tele))
 
 ud.start_polling()
 ud.idle() 
