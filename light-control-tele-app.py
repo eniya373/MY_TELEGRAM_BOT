@@ -12,6 +12,7 @@ def turnonthelight(update, context):
   context.bot.send_photo(chat_id=update.effective_chat.id,photo='https://img.icons8.com/plasticine/2x/light-on.png')
   send_value(1)
 
+  
 def send_value(value):
   feed = aio.feeds('telegram_app_bot1')
   aio.send_data(feed.key,value)
