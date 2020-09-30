@@ -27,7 +27,6 @@ def send_data_to_adafruit(value1):
   value = Data(value=value1)
   value_send = aio.create_data('telegrambot',value)
     
-  
 def turn_on_light(bot, update):
   chat_id = update.message.chat_id
   bot.send_message(chat_id, text="Turning on the light")
