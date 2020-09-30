@@ -1,6 +1,3 @@
-
-!pip install adafruit.io
-!pip install python-telegram-bot
 # importing libraries
 from Adafruit_IO import Client, Feed, Data
 from telegram.ext import Updater, CommandHandler, Filters, MessageHandler
